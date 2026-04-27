@@ -36,7 +36,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="h-screen overflow-hidden relative">
+    <div className="min-h-[100dvh] h-auto md:h-screen md:overflow-hidden relative">
       {/* Soft Background */}
       <FluidBackground />
 
@@ -47,8 +47,8 @@ export default function Home() {
           <Header progress={progress} />
         </div>
 
-        {/* Main grid layout - fills remaining height */}
-        <div className="flex-1 grid grid-cols-1 lg:grid-cols-5 gap-4 min-h-0">
+        {/* Main grid layout - fills remaining height on desktop */}
+        <div className="flex-1 grid grid-cols-1 lg:grid-cols-5 gap-4 min-h-0 pb-24 md:pb-0">
           {/* Left: Today tasks - takes 3 columns */}
           <div className="lg:col-span-3 min-h-0">
             <TaskPanel
