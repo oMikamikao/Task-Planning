@@ -8,27 +8,25 @@ import { useTaskManager } from '@/hooks/useTaskManager';
 
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { 
-    addTask, 
-    toggleTask, 
-    deleteTask, 
-    getProgress, 
-    getTodayTasks, 
-    getWeeklyTasks, 
-    getMonthlyTasks 
+  const {
+    addTask,
+    toggleTask,
+    deleteTask,
+    getTodayProgress,
+    getTodayTasks,
+    getWeeklyTasks,
+    getMonthlyTasks,
   } = useTaskManager();
 
-  const handleAddTask = (title: string, dueDate: number) => {
-    addTask(title, dueDate);
+  const handleAddTask = (title: string, type: 'daily' | 'weekly' | 'monthly', dueDate?: number) => {
+    addTask(title, type, dueDate);
   };
 
-  const progress = getProgress();
-  
+  const progress = getTodayProgress();
   const todayTasks = getTodayTasks();
   const weeklyTasks = getWeeklyTasks();
   const monthlyTasks = getMonthlyTasks();
 
-  // Preload audio on mount
   useEffect(() => {
     const audio = new Audio('/sounds/complete.mp3');
     audio.volume = 0.4;
@@ -36,20 +34,14 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-[100dvh] h-auto md:h-screen md:overflow-hidden relative">
-      {/* Soft Background */}
+    <div className="h-screen overflow-hidden relative">
       <FluidBackground />
-
-      {/* Main Content */}
-      <div className="relative z-10 h-full max-w-7xl mx-auto px-4 py-5 md:px-6 md:py-6 flex flex-col">
-        {/* Header with progress */}
+      <div className="relative z-10 h-full max-w-6xl mx-auto px-4 py-5 md:px-6 md:py-6 flex flex-col">
         <div className="flex-shrink-0">
           <Header progress={progress} />
         </div>
 
-        {/* Main grid layout - fills remaining height on desktop */}
         <div className="flex-1 grid grid-cols-1 lg:grid-cols-5 gap-4 min-h-0 pb-24 md:pb-0">
-          {/* Left: Today tasks - takes 3 columns */}
           <div className="lg:col-span-3 min-h-0">
             <TaskPanel
               title="今日任务"
@@ -64,9 +56,7 @@ export default function Home() {
             />
           </div>
 
-          {/* Right: Weekly + Monthly - takes 2 columns */}
           <div className="lg:col-span-2 flex flex-col gap-4 min-h-0">
-            {/* Weekly panel */}
             <div className="flex-1 min-h-0">
               <TaskPanel
                 title="本周目标"
@@ -80,8 +70,6 @@ export default function Home() {
                 maxHeight="calc(50vh - 130px)"
               />
             </div>
-
-            {/* Monthly panel */}
             <div className="flex-1 min-h-0">
               <TaskPanel
                 title="月度愿景"
@@ -99,15 +87,8 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Floating Action Button */}
       <FloatingButton onClick={() => setIsModalOpen(true)} />
-
-      {/* Create Task Modal */}
-      <CreateTaskModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSubmit={handleAddTask}
-      />
+      <CreateTaskModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSubmit={handleAddTask} />
     </div>
   );
 }
